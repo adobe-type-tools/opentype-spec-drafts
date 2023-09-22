@@ -1,0 +1,102 @@
+%\documentclass[xetex,letterpaper,12pt]{article}
+\documentclass[letterpaper,12pt]{article}
+\usepackage[utf8]{luainputenc}
+\usepackage{luatex85}
+%\usepackage{interchar}
+\usepackage[bookmarksnumbered=false]{hyperref}
+\usepackage[tmargin=1in, bmargin=1in, rmargin=1in, lmargin=1in]{geometry}
+\usepackage[authordate,backend=biber,cmsdate=on]{biblatex-chicago}
+\usepackage{fontspec}
+\usepackage{calc}
+\usepackage{longtable, booktabs, array}
+\usepackage{tabularx}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+\usepackage{titlesec}
+\usepackage{unicode-math}
+%\usepackage[kerning=true]{microtype}
+\usepackage{microtype}
+\usepackage{draftwatermark}
+\usepackage{cleveref}
+
+\setmainfont{Libertinus Serif}
+\setsansfont{Libertinus Sans}
+\setmathfont[AutoFakeBold]{Libertinus Math}
+
+\setstretch{1.5}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue}
+
+%\newintercharclass{\mdclass}
+%\intercharclass{`—}{\mdclass}
+%\interchartoks{0}{\mdclass}{\hspace{.04em}}
+%\interchartoks{255}{\mdclass}{\hspace{.04em}}
+%\interchartoks{\mdclass}{0}{\hspace{.04em}}
+%\interchartoks{\mdclass}{255}{\hspace{.04em}}
+%\intercharstate{1}
+
+%\SetExtraKerning
+%    {encoding =  {OT1,T1,T2A,LY1,OT4,QX,T5,TS1,EU1,EU2}} % all text
+%    {
+%        \textemdash  = {70,70} % thinspace = 1/6 em
+%    }
+
+\renewcommand\abstractname{\normalfont\textsc{Abstract}}
+
+\providecommand{\tightlist}{%
+	  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\IfFileExists{gittag.tex}%
+  {\input{gittag.tex}}
+  {\newcommand\gittag{}}
+
+\SetWatermarkAngle{315}
+\SetWatermarkText{\gittag}
+\SetWatermarkFontSize{20pt}
+\SetWatermarkHorCenter{.75in}
+\SetWatermarkVerCenter{10.25in}
+
+\titleformat{\section}
+  {\large}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\normalsize}{\thesubsection}{1em}{}
+
+\urlstyle{rm}
+
+\makeatletter
+
+\fancypagestyle{firststyle}
+{
+   \fancyhf{}
+   \renewcommand\headrulewidth{0.0pt}
+   \fancyfoot[C]{\thepage}
+}
+\fancypagestyle{reststyle}
+{
+   \fancyhf{}
+   \renewcommand\headrulewidth{0.4pt}
+   \fancyhead[LE,RO]{\thepage}
+%   \fancyfoot[LE,RO]{\tiny{Copyright Notice}}
+   \fancyhead[LO,RE]{\textsc{\@title}}
+%   \fancyhead[LO,RE]{\@author}
+}
+
+
+\def\dotitle{
+\thispagestyle{firststyle}
+\begin{center}
+{\Large \@title}\\
+\smallskip
+\centerline{\@author}
+\smallskip
+\centerline{\@date}
+\end{center}
+}
+
+\pagestyle{reststyle}
+
+\makeatother
+\author{Skef Iterum}
