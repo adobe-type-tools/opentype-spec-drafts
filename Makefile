@@ -1,13 +1,17 @@
 
-BASES := conditions vfdefault repinstance_spec condvalue_spec newfeatvar
+TOCBASES := conditions vfdefault repinstance_spec condvalue_spec newfeatvar
+NOTOCBASES := varchintguide newfeatvar_spec negation cff2hintorder
 PANDOC := pandoc
-PANARGS := --data-dir=pandoc-data --pdf-engine=lualatex --template=paper --toc
-PDFS := ${BASES:=.pdf}
+PANARGS := --data-dir=pandoc-data --pdf-engine=lualatex
+TOCPDFS := ${TOCBASES:=.pdf}
+NOTOCPDFS := ${NOTOCBASES:=.pdf}
+${TOCPDFS}: EXTRA_ARGS := --template=paper
+${NOTOCPDFS}: EXTRA_ARGS := --template=notocpaper
 
-all: ${PDFS}
+all: ${TOCPDFS} ${NOTOCPDFS}
 
 clean:
-	${RM} ${PDFS}
+	${RM} ${TOCPDFS} ${NOTOCPDFS}
 
 %.pdf : %.md
-	${PANDOC} ${PANARGS} -o $@ $<
+	${PANDOC} ${PANARGS} ${EXTRA_ARGS} -o $@ $<
