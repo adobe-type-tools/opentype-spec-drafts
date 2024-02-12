@@ -1,7 +1,7 @@
 ---
 title: "VARC Hint Guidance for CFF2"
 
-date: February 9, 2024
+date: February 12, 2024
 author: Skef Iterum
 mainfont: LibertinusSerif-Regular.otf
 geometry: margin=1.4in
@@ -44,6 +44,10 @@ uint16   initialPrivateDICT         The FontDICT index associated with of
 Offset32 fdSelectOffset             Offset (from start of CFSH table) to
                                     the FontDICTSelect subtable. Must not
                                     be 0.
+
+Offset32 itemVarStoreOffset         Offset (from start of CFSH table) to
+                                    the Item Variation Store table (may
+                                    be 0)
 -------------------------------------------------------------------------
     
 ## Private DICT Index and initialPrivateDICT {-}
@@ -61,6 +65,13 @@ of the CFF2 FontDICT INDEX, so that the index of the first CFSH Private DICT is
 one greater than the index of the last CFF2 Private DICT. The indexes of the
 two sets of Private DICTs must not overlap.
 
+If the itemVarStoreOffset field is non-zero, then the `vsindex` and `blend`
+operators refer to the Item Variation Store it points to. If the field is zero
+then those operators refer to the Item Variation Store in the CFF2 table.
+
+PrivateDICTs in the CFSH table must not use the `Subrs` operator, and thus
+are always self-contained.
+
 ## The FontDICTSelect Offset {-}
 
 The FontDICTSelect offset points to a CFF2 FontDICTSelect subtable
@@ -76,6 +87,10 @@ subtable in the 'CFF2' table but there must not be gap between the last glyph
 mapped in 'CFF2' and the first glyph mapped in 'CFSH'. The `sentinel` field in
 'CFSH' must be the highest GID defined in the font.
 
+## The itemVarStore Offset {-}
+
+When not zero this points to an Item Variation Store used for the `vsindex` and
+`blend` operators for the private dicts in the table.
 
 # VARC and Hinting {-}
 
@@ -110,15 +125,20 @@ transformations and translations through all compositing layers.
 
 ### The Private DICT {-}
 
-Two subtables of two different tables define the association between a GID and
-a Private DICT. The first is the FontDICTSelect subtable of the 'CFSH' table,
-which, with one exception, is checked first. If the GID is not mapped there, the
-mapping falls back to the FontDICTSelect subtable of 'CFF2'.
+Two subtables of two different tables define the association between the GID of
+a VARC composite and a Private DICT. The first is the FontDICTSelect subtable
+of the 'CFSH' table, which is checked first. If the GID is not mapped there,
+the mapping falls back to the FontDICTSelect subtable of 'CFF2'.
 
-The exception case is if the two FontDICTSelect mappings overlap for a GID and
-both the CFF2 glyph and the VARC glyph with that GID have non-empty content.
-In that case the FontDICTSelect subtable from 'CFSH' is used for the VARC glyph
-while the FontDICTSelect subtable from CFF2 is used for the CFF2 glyph.
+Note that rendering a CFF2 component of a composite glyph will typically
+require data from both the component's Private DICT and the composite's Private
+DICT. The former is always stored in the CFF2 table and mapped by the CFF2
+FontDICTSelect subtable, and may contain `Subrs` and `vsindex` operators needed
+to desubroutinize and resolve any `blend`s. The composite PrivateDICT can be in
+either the CFF2 table or the CFSH table and defines the composite glyph's
+"Blue" parameters and standard stem sizes. (When a VARC composite loads data
+from the CFF2 component with the same GID, tne FontDICTSelect mapping in CFSH
+will typically need to overlap with that of the CFF2 table for that glyph.)
 
 Fonts that conform to the specification will map all GIDs to at least one
 Private DICT, but if a mapping is missing the client should use FontDICT index
@@ -217,7 +237,10 @@ that extensively modified the CFF2 text is not yet integrated.)
     maxp count.
 
 2.  When a font has a VARC table, the highest glyph mapped by the
-    FontDICTSelect structure can be less than the maxp count as long as there
-    is a `CFSH` table mapping any remaining glyphs. The ranges of mapped glyphs
-    can overlap as described in (cross-reference `CFSH` section "The
-    FontDICTSelect Offset")
+    FontDICTSelect structure can be less than the maxp count as long as two
+    requirements are met. The first requirement is that there is a `CFSH` table
+    that maps any remaining glyphs. The second requirement is that every glyph
+    in the CharStringINDEX must be mapped.
+
+    The ranges of mapped glyphs can overlap as described in (cross-reference
+    `CFSH` section "The FontDICTSelect Offset")
