@@ -1,6 +1,6 @@
 ---
 title: "Feature Variations: New LookupVariation Mechanism"
-date: February 5, 2024
+date: March 11, 2024
 author: Skef Iterum, Adobe Inc.
 mainfont: LibertinusSerif-Regular.otf
 geometry: margin=1.4in
@@ -21,28 +21,23 @@ The unnumbered "FeatureVariations Table" section at the start of the numbered
 "Feature variations" section is changed to the following (so that the last
 three of the current paragraphs are removed):
 
-> A feature variations table describes variations on the effects of features
-> based on various conditions. That is, it allows the default set of lookups for
-> a given feature to be substituted with alternates of lookups under particular
-> conditions.
+> A FeatureVariations Table describes how a given GSUB or GPOS Feature Table
+> should be altered within specified regions of the design space of variable
+> font, based on the value of *condition sets*, which are conjunctions of
+> boolean *conditions*.
 > 
-> The feature list provides an array of feature tables and associated feature
-> tags, and a LangSys table identifies a particular set of the feature-table/tag
-> pairs that will be supported for a given script and language system. The
-> feature tables specified in a LangSys table are used by default when current
-> conditions do not match any of the conditions for variation defined among the
-> FeatureVariationRecords and LookupVariationRecords. Those defaults will
-> also be used under all conditions in implementations that do not support
-> the feature variations table.
-> 
-> The FeatureVariations table provides two mechanisms for altering the
-> lookups associated with a feature index. One is the array of
-> FeatureVariationRecords introduced in version 1.0 of the table. This system
-> is feature-table oriented, providing an offset to a different feature table
-> to be used when a set of conditions is met.  The second mechanism is the
-> array of LookupVariationRecords added in version 1.1. This system is
-> lookup-oriented, allowing individual lookups to be chosen according to when
-> a condition set is or is not met.
+> The Feature List Table of a GSUB or GPOS table contains a list of offsets to
+> Feature Tables which can be indexed either by tag or by offset in the
+> list—the later being its "feature index".  The FeatureVariations table
+> provides two mechanisms for altering the lookups associated with a given
+> feature index. One is the array of FeatureVariationRecords introduced in
+> version 1.0 of the table. This system is feature-table oriented, providing an
+> offset to a different feature table to be used when a set of conditions is
+> met.  The second mechanism is the array of LookupVariationRecords added in
+> version 1.1. This system is lookup-oriented, allowing individual lookups to
+> be chosen according to when a condition set is or is not met.  A
+> LookupVariationRecord provides a more compact encoding when more than a few
+> lookups need to be changed.
 
 /noindent The table definition becomes:
 
@@ -93,32 +88,32 @@ Offset32  featureLookupsTable                 Offset to a FeatureLookupsTable
 The LookupVariationRecord and its subtables provide an alternative mechanism
 for changing the lookups associated with a featureIndex.  When the index for a
 feature is present in a LookupVariationRecord, the FeatureLookupsTable at
-the offset supplement or replace the default lookups associated with that
-index.
+the offset either supplements or replaces the default lookups associated with
+that index.  The subtables of a FeatureLookupsTable are organized around
+individual lookups rather than whole tables, with individual or groups of
+lookups activated for the index when given condition sets apply or fail to
+apply.
 
-The subtables of LookupVariationRecords are organized around individual lookups
-rather than whole tables, with individual or groups of lookups activated for
-the index when given condition sets apply or fail to apply.
-
-Every combination of lookups that can be expressed with a LookupVariationRecord
+(Every combination of lookups that can be expressed with a LookupVariationRecord
 can also be expressed with a FeatureVariationRecord, but the former will
 generally take up less space and be more straightforward to format and process
-than the latter when more than a few variations are specified.
+than the latter when more than a few variations are specified.)
 
 A typical FeatureVariations Table will contain either FeatureVariationRecords
 or LookupVariationRecords but not both.  The primary reason for having both
-would be if the LookupVariationRecords are used to determine what lookups are
+would be if LookupVariationRecords are used to determine the lookups that are
 applied for a given feature index but the featureParams (add cross reference)
-of some feature tables also need to change in regions of the font's design
-space.  When a given feature index is listed in both a FeatureVariationRecord
-subtable and a LookupVariationRecord subtable, the featureParams are taken from
-the former and the set of lookups is taken from the latter.
+of one or more feature tables also need to change in certain regions of the
+font's design space.  When a given feature index is listed in both a
+FeatureVariationRecord subtable and a LookupVariationRecord subtable, the
+featureParams are taken from the former and the set of lookups is taken from
+the latter.
 
 Because LookupVariationRecords specify the set of lookups that apply at the
 default location just as it does with any other location, it is strongly
-recommended that the same lookups are specified by both mechanisms for all
-affected feature indexes.
-
+recommended that the lookups active for the default location according to 
+a FeatureLookupsTable match the list of lookups in the Feature Table of
+the feature index it corresponds to
 
 ### FeatureLookupsTable {-}
 
@@ -144,8 +139,8 @@ LookupConditionRecord  lookupConditionRecord[conditionCount]                Arra
 \normalsize
 
 The FeatureLookupsTable provides offsets to a list of LookupConditionRecords
-that affect the featureIndex. Because all LookupConditionRecords are evaluated,
-they can be in any order.
+that affect the associated featureIndex. Because all LookupConditionRecords are
+evaluated, they can be in any order.
 
 Flags can be assigned to indicate certain uses or behaviors for a given
 FeatureLookups table. The following flags are defined.
