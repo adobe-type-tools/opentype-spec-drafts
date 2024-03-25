@@ -1,0 +1,119 @@
+%\documentclass[xetex,letterpaper,12pt]{article}
+\documentclass[letterpaper,12pt]{article}
+\usepackage[utf8]{luainputenc}
+\usepackage{luatex85}
+%\usepackage{interchar}
+\usepackage[bookmarksnumbered=false]{hyperref}
+\usepackage[tmargin=1in, bmargin=1in, rmargin=1in, lmargin=1in]{geometry}
+\usepackage[authordate,backend=biber,cmsdate=on]{biblatex-chicago}
+\usepackage{fontspec}
+\usepackage{datetime}
+\usepackage{calc}
+\usepackage{longtable, booktabs, array}
+\usepackage{tabularx}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{soul}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{etoolbox}
+\usepackage{titlesec}
+\usepackage{unicode-math}
+%\usepackage[kerning=true]{microtype}
+\usepackage{microtype}
+\usepackage{draftwatermark}
+\usepackage{cleveref}
+
+\setmainfont{Source Serif 4}
+\setsansfont{Source Sans 3}
+\setmathfont[AutoFakeBold]{Libertinus Math}
+
+\setlength{\parindent}{0pt}
+
+\setstretch{1.5}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+
+\hypersetup{colorlinks=true, urlcolor=blue, linkcolor=blue}
+
+%\newintercharclass{\mdclass}
+%\intercharclass{`—}{\mdclass}
+%\interchartoks{0}{\mdclass}{\hspace{.04em}}
+%\interchartoks{255}{\mdclass}{\hspace{.04em}}
+%\interchartoks{\mdclass}{0}{\hspace{.04em}}
+%\interchartoks{\mdclass}{255}{\hspace{.04em}}
+%\intercharstate{1}
+
+%\SetExtraKerning
+%    {encoding =  {OT1,T1,T2A,LY1,OT4,QX,T5,TS1,EU1,EU2}} % all text
+%    {
+%        \textemdash  = {70,70} % thinspace = 1/6 em
+%    }
+
+\renewcommand\abstractname{\normalfont\textsc{Abstract}}
+
+\providecommand{\tightlist}{%
+	  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\IfFileExists{gittag.tex}%
+  {\input{gittag.tex}}
+  {\newcommand\gittag{}}
+
+%    {\begin{tabular}{p{1.0\textwidth}}
+\newenvironment{pboxed}
+    {\color{purple}\makebox[\linewidth]{\rule[.3em]{\textwidth}{0.4pt}}\newline
+    }
+    {\newline\makebox[\linewidth]{\rule[.5em]{\textwidth}{0.4pt}}
+    }
+%
+
+\SetWatermarkAngle{315}
+\SetWatermarkText{\gittag}
+\SetWatermarkFontSize{20pt}
+\SetWatermarkHorCenter{.75in}
+\SetWatermarkVerCenter{10.25in}
+
+\titleformat{\section}
+  {\large\bf}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\normalsize\bf}{\thesubsection}{1em}{}
+
+\urlstyle{rm}
+
+\makeatletter
+
+\fancypagestyle{allstyle}
+{
+   \fancyhf{}
+   \renewcommand\headrulewidth{0.0pt}
+   \fancyfoot[C]{\thepage}
+}
+
+\def\dotitle{
+\begin{center}
+{\bf\large INTERNATIONAL ORGANISATION FOR STANDARDIZATION}\\
+    \vspace*{1em}
+{\bf\large ORGANISATION INTERNATIONALE DE NORMALIZATION}\\
+    \vspace*{1em}
+{\bf\large ISO/IEC JTC 1/SC 29/WG 3}\\
+    \vspace*{1em}
+{\bf\large CODING OF MOTING PICTURES AND AUDIO}
+\end{center}
+    \vspace*{2em}
+\begin{flushright}
+{\bf\large ISO/IEC JTC 1/SC 29/WG 3 \Large mNNNN}\\
+    \vspace*{1em}
+{\bf\large Online — \@date}\\
+\end{flushright}
+    \vspace*{2em}
+\begin{flushleft}
+{\bf\large Title: \@title}\\
+    \vspace*{2em}
+{\bf\large Author: \@author}\\
+\end{flushleft}
+\newpage
+}
+
+\pagestyle{allstyle}
+
+\makeatother
