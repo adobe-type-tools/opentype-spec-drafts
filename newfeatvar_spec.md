@@ -29,8 +29,8 @@ sections of the current text that are not reproduced should be added.
 
 ## Condition Table
 
-A condition table describes a particular ==boolean—that is, either true or
-false—==condition. Different ==condition table formats== may be defined, with each
+A condition table describes a particular ==boolean (either true or false)==
+condition. Different ==condition table formats== may be defined, with each
 format used for a particular kind of condition qualifier. ==There are currently
 four formats, each of which is parameterized by the same factor: the variation
 instance of a variable font.==
@@ -112,11 +112,11 @@ is supported: the variation instance of a variable font.
 A condition set does not need to specify conditions for all possible factors
 ==or all aspects of a given factor.  For example, if the location on one axis
 of a variable font is not relevant to the use of a condition set, its
-conditions can simply omit any reference to that axis. Accordingly,== when a
-condition set contains *no* conditions  ==it *always* applies.==
+conditions can simply omit any reference to that axis. When a
+condition set contains *no* conditions ==it *always* applies.==
 
 ==The particular use or meaning of a condition set table is context-dependent,
-but in every case it divides the space of its factors into two: the region
+but in every case it divides the space of its factor(s) into two: the region
 or regions in which the condition set applies, and the region or regions in
 which it does not apply. These are respectively equivalent to the space in
 which all of its conditions are true and the space in which at least one of
@@ -204,9 +204,9 @@ alternate Feature table might be substituted.==
 ==The list of FeatureVariation records is searched in order for a condition set
 that applies to the set of factors matching== the current runtime
 context==—currently an instance of a variable font.  When the first such
-condition set is found the search stops, and whatever alternate Feature tables
-it points to are substituted for tables in the main Feature List according to
-the specified Feature indexes.==
+condition set is found the search should stop, and whatever alternate Feature
+tables it points to should be substituted for tables in the main Feature List
+according to the specified Feature indexes.==
 
 Note that the records shall be ordered in increasing order of FeatureIndex
 values, and no two records may have the same FeatureIndex value. ==This is so
@@ -331,13 +331,13 @@ FeatureLookups table. The following flags are defined.==
 
 \normalsize
 
-==The LookupConditions record encodes the equivalent to an if/else structure.
-When when the condition set applies all lookups from the trueLookupIndexList
-are added to the set of lookups corresponding to the feature index. When it
-does not apply the lookups from the falseLookupIndexList are added to that set.
-Either entry (but not both) can be disabled by setting its offset to 0. As with
+==The LookupConditions record encodes the equivalent of an if/else structure.
+When the condition set applies all lookups from the trueLookupIndexList
+should be added to the set of lookups corresponding to the feature index. When it
+does not apply the lookups from the falseLookupIndexList should be added to that
+set.  Either entry (but not both) can be disabled by setting its offset to 0. As with
 condition sets generally, a 0 offset indicates the set always applies, and
-therefore the entries from the trueLookupIndexSet will be added.==
+therefore the entries from the trueLookupIndexSet should be added.==
 
 ==A typical FeatureVariations Table will contain either FeatureVariationRecords
 or LookupVariationRecords but not both.  The primary reason for having both
@@ -346,12 +346,13 @@ applied for a given feature index but the featureParams (see 6.2.5)
 of one or more feature tables also need to change in certain regions of the
 font's design space.  When a given feature index is listed in both a
 FeatureVariationRecord subtable and a LookupVariationRecord subtable, the
-featureParams are taken from the former and the set of lookups is taken from
-the latter.==
+featureParams should be taken from the former and the set of lookups should be
+taken from the latter (or from both if the ADD\_DEFAULT\_LOOKUPS flag is set).==
 
-==Because LookupVariationRecords specify the set of lookups for the default
-instance, it is strongly recommended that that set match the list of lookups in
-the Feature table of the Feature index it corresponds to.==
+==NOTE: Because LookupVariationRecords specify the set of lookups for the default
+instance, it is strongly recommended that the set of lookups specified for a
+given Feature index using that mechanism match the list of lookups in the
+Feature table of the index that it corresponds to.==
 
 ## Explanation of FeatureVariations table processing
 
