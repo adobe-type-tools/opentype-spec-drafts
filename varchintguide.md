@@ -230,6 +230,11 @@ to "external" transforms, such as those specified with a Cascading Style Sheets
 circumstances or can compose those transforms into the cumulative transformation of
 the stem hints, as described below.
 
+NOTE 2: As of the current version of this specification a `cntrmask` only
+applys at the level of atomic components; there is no means of applying a
+counter-mask to influence the spacing between elements of different components
+of a composite.
+
 Whether hinting in a given dimension should be cancelled, and how the stems in
 that dimension should be adjusted when it is not cancelled, can be determined
 by performing the cumulative transformation on the three points *p~1~* (100,

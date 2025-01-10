@@ -1,7 +1,7 @@
 
 TOCBASES := conditions vfdefault repinstance_spec condvalue_spec newfeatvar
 NOTOCBASES := negation cff2hintorder
-ISOBASES := newfeatvar_spec varchintguide
+ISOBASES := newfeatvar_spec varchintguide vsindex vslength
 PANDOC := pandoc
 PANARGS := --data-dir=pandoc-data --pdf-engine=lualatex
 TOCPDFS := ${TOCBASES:=.pdf}
